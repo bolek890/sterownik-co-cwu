@@ -1,0 +1,11 @@
+# PlatformIO
+.pio/
+.vscode/
+
+# Dane prywatne: sekrety i ustawienia tego komputera
+.env
+platformio_local.ini
+
+# Zbudowane obrazy firmware - zawieraja wartosci z .env (np. nazwe sieci Wi-Fi)
+dist/
+*.bin

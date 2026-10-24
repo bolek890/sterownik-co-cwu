@@ -1,0 +1,9 @@
+; Skopiuj jako platformio_local.ini, jesli chcesz na stale wskazac port plytki.
+; Bez tego pliku PlatformIO wykrywa port automatycznie. Numery portow to przyklad.
+[env:sterownik]
+upload_port = COM3
+monitor_port = COM3
+
+[env:c3]
+upload_port = COM4
+monitor_port = COM4
