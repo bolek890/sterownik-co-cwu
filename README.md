@@ -103,7 +103,12 @@ src/input.cpp           enkoder, BOOT, przycisk reset
 src/settings.cpp        ustawienia użytkownika (NVS)
 src/devcfg.cpp          konfiguracja urządzenia i piny (NVS)
 scripts/load_env.py     zamiana .env na nagłówek env.h przy kompilacji
+projektant/ekrany.json  ekrany i menu (src/ui.cpp) jako projekt dla projektanta ekranów 128×64
 ```
+
+`projektant/ekrany.json` otwiera się w przeglądarkowym projektancie ekranów 128×64 (osobna aplikacja,
+przycisk **Otwórz…**). Działa tam podgląd i symulacja wszystkich ekranów, menu, alarmów i komunikatów.
+To kopia do projektowania i testów. Firmware nadal rysuje ekrany kodem z `src/ui.cpp`.
 
 Biblioteki: U8g2, OneWire, DallasTemperature, Firebase Arduino Client Library, ESPAsyncWebServer,
 AsyncTCP, ArduinoJson (pobierane automatycznie przez PlatformIO).
