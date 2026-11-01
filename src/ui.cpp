@@ -250,14 +250,17 @@ static void drawChart(const Ctx &c, uint8_t id) {
     if (cnt) { any = true; lo = min(lo, val[px]); hi = max(hi, val[px]); }
   }
 
-  u8g2.drawFrame(X0, Y0, W, H);
   if (!any) {
+    // no scale on the left yet - centre the frame on the screen
+    const int WE = 114, XE = (128 - WE) / 2;   // even width: 7 px margin on both sides
+    u8g2.drawFrame(XE, Y0, WE, H);
     u8g2.setFont(F_LABEL);
-    textCenter(X0 + W / 2, Y0 + 24, "Zbieranie danych");
+    textCenter(64, Y0 + 24, "Zbieranie danych");
     u8g2.setFont(F_SMALL);
-    textCenter(X0 + W / 2, Y0 + 34, "PROBKA CO 1 MIN");
+    textCenter(64, Y0 + 34, "PROBKA CO 1 MIN");
     return;
   }
+  u8g2.drawFrame(X0, Y0, W, H);
   lo = min(lo, limit);
   hi = max(hi, limit);
   lo = floorf((lo - 2) / 5) * 5;
