@@ -98,7 +98,9 @@ static void fmtTemp(char *buf, size_t n, float v) {
   else snprintf(buf, n, "%.1f°", v);
 }
 
-static bool hasPumps() { return PIN_PUMP_CO >= 0 || PIN_PUMP_CWU >= 0; }
+static bool hasPumps() { return (PIN_PUMP_CO >= 0 || PIN_PUMP_CWU >= 0) && settingsGet().pumps; }
+// "Pompa CO" / "Pompa CWU" settings groups - hidden while the pump section is off
+static bool isPumpGroup(const char *g) { return !strncmp(g, "Pompa ", 6); }
 
 // ---------------------------------------------------------------------------
 // Naglowek: tytul, dzwonek alarmu, Wi-Fi, zegar
@@ -829,7 +831,8 @@ static void buildRows(const Ctx &c) {
     case MP_ROOT:
       addRow("< Zamknij", A_BACK);
       if (c.unacked) addRow("Wycisz alarm", A_ACK);
-      for (int g = 0; g < groupCount; g++) addRow(groups[g], A_GROUP, g, "", true);
+      for (int g = 0; g < groupCount; g++)
+        if (c.cfg.pumps || !isPumpGroup(groups[g])) addRow(groups[g], A_GROUP, g, "", true);
       addRow("Czujniki", A_SENSORS, 0, "", true);
       addRow("Sieć Wi-Fi", A_NET, 0, "", true);
       addRow("Informacje", A_INFO);      // ekran Siec i system (poza petla, gdy brak bledow)

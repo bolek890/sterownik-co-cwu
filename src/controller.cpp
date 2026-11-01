@@ -180,7 +180,7 @@ static void evaluatePumps(const Settings &cfg, float dt) {
   PumpState &co = st.pump[PUMP_CO];
   bool on = co.on;
   const char *why = co.reason;
-  if (!cfg.coEnabled)                   { on = false; why = R_DISABLED; }
+  if (!cfg.pumps || !cfg.coEnabled)     { on = false; why = R_DISABLED; }
   else if (pFault)                      { on = true;  why = R_SENSOR; }   // bezpieczniej krecic woda
   else if (!p.ok)                       { /* pojedynczy blad - bez zmian */ }
   else if (st.alarms & AL_PIEC_HIGH)    { on = true;  why = R_OVERHEAT; }
@@ -198,7 +198,7 @@ static void evaluatePumps(const Settings &cfg, float dt) {
   PumpState &cwu = st.pump[PUMP_CWU];
   on = cwu.on;
   why = cwu.reason;
-  if (!cfg.cwuEnabled)                  { on = false; why = R_DISABLED; }
+  if (!cfg.pumps || !cfg.cwuEnabled)    { on = false; why = R_DISABLED; }
   else if (pFault || bFault)            { on = false; why = R_NODATA; }
   else if (p.ok && b.ok) {
     float diff = p.temp - b.temp;

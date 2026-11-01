@@ -15,6 +15,7 @@ const SettingField SETTINGS_FIELDS[] = {
   FLD(buzzer,      ST_BOOL,  0, 1,    1,   "Alarmy", "Sygnał dźwiękowy przy alarmie", "Dźwięk", "", SF_NONE),
   FLD(buzzerPassive, ST_BOOL, 0, 1,   1,   "Alarmy", "Brzęczyk pasywny (bez generatora)", "Brz. pasywny", "", SF_NONE),
   FLD(buzzerLow,   ST_BOOL,  0, 1,    1,   "Alarmy", "Brzęczyk załączany stanem niskim", "Brz. stan niski", "", SF_NONE),
+  FLD(pumps,       ST_BOOL,  0, 1,    1,   "Pompy", "Sekcja pomp (sterowanie, ekran, ustawienia)", "Włączone", "", SF_NONE),
   FLD(coEnabled,   ST_BOOL,  0, 1,    1,   "Pompa CO", "Sterowanie pompą CO", "Sterowanie", "", SF_NONE),
   FLD(coOn,        ST_FLOAT, 25, 80,  0.5, "Pompa CO", "Załączenie od temperatury pieca", "Załącz od", "°C", SF_NONE),
   FLD(coHyst,      ST_FLOAT, 1, 15,   0.5, "Pompa CO", "Histereza", "Histereza", "°C", SF_NONE),

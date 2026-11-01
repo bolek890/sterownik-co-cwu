@@ -110,6 +110,7 @@ static void handleStatus(AsyncWebServerRequest *request) {
     a["acked"] = (st.acked & bit) != 0;
   }
 
+  doc["pumpsEnabled"] = cfg.pumps;
   const char *pumpNames[2] = {"co", "cwu"};
   JsonObject pumps = doc["pumps"].to<JsonObject>();
   for (int i = 0; i < 2; i++) {

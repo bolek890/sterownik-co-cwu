@@ -74,7 +74,7 @@ legend{font-weight:600;padding:0 6px}
 <div class="t" id="boiler-t">—</div><div class="bar"><i id="boiler-bar"></i></div>
 <div class="trend muted" id="boiler-trend"></div></section>
 
-<section class="card"><h2>Pompy</h2>
+<section class="card" id="c-pumps"><h2>Pompy</h2>
 <div class="pump"><div><b>Pompa CO</b><div class="muted" id="co-reason"></div></div><span class="tag" id="co-tag">—</span></div>
 <div class="pump"><div><b>Pompa CWU</b><div class="muted" id="cwu-reason"></div></div><span class="tag" id="cwu-tag">—</span></div>
 </section>
@@ -135,6 +135,8 @@ async function status(){
     const s=await j('/api/status');$('#conn').className='dot on';
     $('#clock').textContent=s.time?new Date(s.time*1000).toLocaleString('pl-PL'):'brak czasu NTP';
     sensor('piec',s.piec);sensor('boiler',s.boiler);pump('co',s.pumps.co);pump('cwu',s.pumps.cwu);
+    // pump section switched off in the settings: hide its card and daily pump line
+    $('#c-pumps').style.display=s.pumpsEnabled?'':'none';$('#pumpstats').style.display=s.pumpsEnabled?'':'none';
     const a=$('#alarm');
     if(s.alarms.length){a.style.display='flex';a.classList.toggle('acked',s.alarms.every(x=>x.acked));
       $('#alarmList').innerHTML=s.alarms.map(x=>`<li>${x.text}${x.acked?' (wyciszony)':''}</li>`).join('');
@@ -177,7 +179,7 @@ async function history(){try{H=await j('/api/history');draw()}catch(e){}}
 async function loadSettings(){
   S=await j('/api/settings');const groups={};
   for(const f of S.fields)(groups[f.group]=groups[f.group]||[]).push(f);
-  $('#fields').innerHTML=Object.entries(groups).map(([gname,fs])=>{
+  $('#fields').innerHTML=Object.entries(groups).filter(([gname])=>S.values.pumps||!/^Pompa /.test(gname)).map(([gname,fs])=>{
     const note=(gname==='Pompa CO'&&!S.pumpOutputs.co)||(gname==='Pompa CWU'&&!S.pumpOutputs.cwu)?
       '<div class="muted" style="font-size:13px">Brak skonfigurowanego wyjścia – logika działa tylko jako podgląd.</div>':'';
     return `<fieldset><legend>${gname}</legend>${note}`+fs.map(f=>{const v=S.values[f.key];
@@ -187,8 +189,8 @@ async function loadSettings(){
   draw();
 }
 $('#settings').onsubmit=async e=>{e.preventDefault();const body=new URLSearchParams();
-  for(const f of S.fields){const el=e.target.elements[f.key];body.append(f.key,f.type==='bool'?(el.checked?'1':'0'):el.value)}
-  try{S=await j('/api/settings',{method:'POST',body});await loadSettings();$('#msg').innerHTML='Zapisano '+CHECK}
+  for(const f of S.fields){const el=e.target.elements[f.key];if(!el)continue;body.append(f.key,f.type==='bool'?(el.checked?'1':'0'):el.value)}
+  try{S=await j('/api/settings',{method:'POST',body});await loadSettings();status();$('#msg').innerHTML='Zapisano '+CHECK}
   catch(err){$('#msg').textContent='Błąd zapisu: '+err.message}
   setTimeout(()=>$('#msg').textContent='',4000)};
 $('#ack').onclick=async()=>{await fetch('/api/ack',{method:'POST'});status()};

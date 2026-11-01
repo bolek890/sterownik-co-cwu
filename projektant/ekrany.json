@@ -301,6 +301,12 @@
    "sim": "none"
   },
   {
+   "name": "pumps",
+   "type": "bool",
+   "value": true,
+   "sim": "none"
+  },
+  {
    "name": "coEnabled",
    "type": "bool",
    "value": true,
@@ -2199,7 +2205,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -2841,7 +2847,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -3501,7 +3507,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -4299,7 +4305,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -5170,7 +5176,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -5205,7 +5211,7 @@
      "id": "tmr",
      "event": "cond",
      "ms": 15000,
-     "cond": "!(wyjsciaPomp)",
+     "cond": "!(wyjsciaPomp && pumps)",
      "actions": "",
      "target": "say",
      "anim": "right"
@@ -5987,7 +5993,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -6652,7 +6658,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -6824,7 +6830,7 @@
      "id": "tpd",
      "event": "enter",
      "ms": 15000,
-     "cond": "(cur == 3) && (wyjsciaPomp)",
+     "cond": "(cur == 3) && (wyjsciaPomp && pumps)",
      "actions": "",
      "target": "sb2",
      "anim": "left"
@@ -6970,7 +6976,7 @@
      "id": "tp4",
      "event": "enter",
      "ms": 15000,
-     "cond": "(cur == 0) && (wyjsciaPomp)",
+     "cond": "(cur == 0) && (wyjsciaPomp && pumps)",
      "actions": "",
      "target": "sb2",
      "anim": "right"
@@ -7024,7 +7030,7 @@
      "id": "tpq",
      "event": "enter",
      "ms": 15000,
-     "cond": "(cur == 5) && (wyjsciaPomp)",
+     "cond": "(cur == 5) && (wyjsciaPomp && pumps)",
      "actions": "",
      "target": "sb2",
      "anim": "right"
@@ -7051,7 +7057,7 @@
      "id": "tpv",
      "event": "enter",
      "ms": 15000,
-     "cond": "(cur == 6) && (wyjsciaPomp)",
+     "cond": "(cur == 6) && (wyjsciaPomp && pumps)",
      "actions": "",
      "target": "sb2",
      "anim": "right"
@@ -7502,11 +7508,11 @@
      "icon": "dzwonek"
     },
     {
-     "id": "eqo",
+     "id": "ei2ft",
      "type": "list",
-     "name": "menu (z alarmem)",
+     "name": "menu (alarm)",
      "color": 1,
-     "visibleIf": "unacked",
+     "visibleIf": "unacked && pumps",
      "blink": 0,
      "x": 0,
      "y": 12,
@@ -7515,14 +7521,30 @@
      "rows": 4,
      "font": "helvR08_te",
      "sel": "selRoot",
-     "items": "< Zamknij\nWycisz alarm\nAlarmy|>\nPompa CO|>\nPompa CWU|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
+     "items": "< Zamknij\nWycisz alarm\nAlarmy|>\nPompy|>\nPompa CO|>\nPompa CWU|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
     },
     {
-     "id": "eqp",
+     "id": "ei2fu",
+     "type": "list",
+     "name": "menu (alarm) (bez pomp)",
+     "color": 1,
+     "visibleIf": "unacked && !pumps",
+     "blink": 0,
+     "x": 0,
+     "y": 12,
+     "w": 128,
+     "rowH": 12,
+     "rows": 4,
+     "font": "helvR08_te",
+     "sel": "selRoot",
+     "items": "< Zamknij\nWycisz alarm\nAlarmy|>\nPompy|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
+    },
+    {
+     "id": "ei2fv",
      "type": "list",
      "name": "menu",
      "color": 1,
-     "visibleIf": "!unacked",
+     "visibleIf": "!unacked && pumps",
      "blink": 0,
      "x": 0,
      "y": 12,
@@ -7531,7 +7553,23 @@
      "rows": 4,
      "font": "helvR08_te",
      "sel": "selRoot",
-     "items": "< Zamknij\nAlarmy|>\nPompa CO|>\nPompa CWU|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
+     "items": "< Zamknij\nAlarmy|>\nPompy|>\nPompa CO|>\nPompa CWU|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
+    },
+    {
+     "id": "ei2fw",
+     "type": "list",
+     "name": "menu (bez pomp)",
+     "color": 1,
+     "visibleIf": "!unacked && !pumps",
+     "blink": 0,
+     "x": 0,
+     "y": 12,
+     "w": 128,
+     "rowH": 12,
+     "rows": 4,
+     "font": "helvR08_te",
+     "sel": "selRoot",
+     "items": "< Zamknij\nAlarmy|>\nPompy|>\nWyświetlacz|>\nDane|>\nCzujniki|>\nSieć Wi-Fi|>\nInformacje\nZeruj statystyki|>"
     },
     {
      "id": "eqq",
@@ -7578,7 +7616,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -7601,16 +7639,16 @@
      "anim": "none"
     },
     {
-     "id": "tqw",
+     "id": "ti2fx",
      "event": "cw",
      "ms": 15000,
      "cond": "",
-     "actions": "selRoot = min(selRoot + 1, unacked ? 10 : 9); lastIn = ms",
+     "actions": "selRoot = min(selRoot + 1, 11 - (unacked ? 0 : 1) - (pumps ? 0 : 2)); lastIn = ms",
      "target": "",
      "anim": "none"
     },
     {
-     "id": "tqx",
+     "id": "ti2fy",
      "event": "ccw",
      "ms": 15000,
      "cond": "",
@@ -7619,106 +7657,115 @@
      "anim": "none"
     },
     {
-     "id": "tqy",
+     "id": "ti2fz",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 0",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 0",
      "actions": "",
      "target": "sb7",
      "anim": "none"
     },
     {
-     "id": "tqz",
+     "id": "ti2g0",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 1",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 1",
      "actions": "toast = unacked ? \"Alarm wyciszony\" : alarm ? \"Już wyciszony\" : \"Brak alarmów\"; toastUntil = ms + 1800; ackMask = alMask; lastIn = ms",
      "target": "",
      "anim": "none"
     },
     {
-     "id": "tr0",
+     "id": "ti2g1",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 2",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 2",
      "actions": "selGrp = 1; lastIn = ms",
      "target": "sbb",
      "anim": "none"
     },
     {
-     "id": "tr1",
+     "id": "ti2g2",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 3",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 3",
+     "actions": "selGrp = 1; lastIn = ms",
+     "target": "si2ey",
+     "anim": "none"
+    },
+    {
+     "id": "ti2g3",
+     "event": "click",
+     "ms": 15000,
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 4",
      "actions": "selGrp = 1; lastIn = ms",
      "target": "sbc",
      "anim": "none"
     },
     {
-     "id": "tr2",
+     "id": "ti2g4",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 4",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 5",
      "actions": "selGrp = 1; lastIn = ms",
      "target": "sbd",
      "anim": "none"
     },
     {
-     "id": "tr3",
+     "id": "ti2g5",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 5",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 6",
      "actions": "selGrp = 1; lastIn = ms",
      "target": "sbe",
      "anim": "none"
     },
     {
-     "id": "tr4",
+     "id": "ti2g6",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 6",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 7",
      "actions": "selGrp = 1; lastIn = ms",
      "target": "sbf",
      "anim": "none"
     },
     {
-     "id": "tr5",
+     "id": "ti2g7",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 7",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 8",
      "actions": "selSens = 1; lastIn = ms",
      "target": "sbi",
      "anim": "none"
     },
     {
-     "id": "tr6",
+     "id": "ti2g8",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 8",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 9",
      "actions": "selNet = 1; lastIn = ms",
      "target": "sbk",
      "anim": "none"
     },
     {
-     "id": "tr7",
-     "event": "click",
+     "id": "ti2g9",
+     "event": "cond",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 9",
-     "actions": "infoUntil = ms + 60000; hold = ms + 60000",
-     "target": "sb3",
-     "anim": "left"
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 10",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "target": "",
+     "anim": "none"
     },
     {
-     "id": "tr8",
+     "id": "ti2ga",
      "event": "click",
      "ms": 15000,
-     "cond": "(unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) == 10",
+     "cond": "((unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) + (!pumps && (unacked ? selRoot : selRoot + (selRoot > 0 ? 1 : 0)) >= 4 ? 2 : 0)) == 11",
      "actions": "selRes = 0; lastIn = ms",
      "target": "sbl",
      "anim": "none"
     },
     {
-     "id": "tr9",
+     "id": "ti2gb",
      "event": "long",
      "ms": 15000,
      "cond": "",
@@ -7727,7 +7774,7 @@
      "anim": "none"
     },
     {
-     "id": "tra",
+     "id": "ti2gc",
      "event": "boot",
      "ms": 15000,
      "cond": "",
@@ -8014,7 +8061,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -8167,6 +8214,345 @@
     "x": 660,
     "y": 760
    }
+  },
+  {
+   "id": "si2ey",
+   "name": "Ustawienia: Pompy",
+   "pos": {
+    "x": 1590,
+    "y": 1120
+   },
+   "elements": [
+    {
+     "id": "ei2ez",
+     "type": "box",
+     "name": "nagłówek",
+     "color": 1,
+     "visibleIf": "",
+     "blink": 0,
+     "x": 0,
+     "y": 0,
+     "w": 128,
+     "h": 11
+    },
+    {
+     "id": "ei2f0",
+     "type": "text",
+     "name": "tytuł",
+     "color": 0,
+     "visibleIf": "",
+     "blink": 0,
+     "x": 2,
+     "y": 9,
+     "text": "Pompy",
+     "font": "helvB08_te",
+     "align": "left"
+    },
+    {
+     "id": "ei2f1",
+     "type": "text",
+     "name": "zegar",
+     "color": 0,
+     "visibleIf": "timeValid",
+     "blink": 0,
+     "x": 127,
+     "y": 8,
+     "text": "{clock}",
+     "font": "5x7_tf",
+     "align": "right"
+    },
+    {
+     "id": "ei2f2",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (wifi) && (rssi > -55)",
+     "blink": 0,
+     "x": 92,
+     "y": 1,
+     "icon": "wifi 4"
+    },
+    {
+     "id": "ei2f3",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (wifi) && (rssi <= -55 && rssi > -65)",
+     "blink": 0,
+     "x": 92,
+     "y": 1,
+     "icon": "wifi 3"
+    },
+    {
+     "id": "ei2f4",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (wifi) && (rssi <= -65 && rssi > -75)",
+     "blink": 0,
+     "x": 92,
+     "y": 1,
+     "icon": "wifi 2"
+    },
+    {
+     "id": "ei2f5",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (wifi) && (rssi <= -75)",
+     "blink": 0,
+     "x": 92,
+     "y": 1,
+     "icon": "wifi 1"
+    },
+    {
+     "id": "ei2f6",
+     "type": "icon",
+     "name": "Wi-Fi brak",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (!wifi)",
+     "blink": 0,
+     "x": 92,
+     "y": 3,
+     "icon": "wifi brak"
+    },
+    {
+     "id": "ei2f7",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (wifi) && (rssi > -55)",
+     "blink": 0,
+     "x": 120,
+     "y": 1,
+     "icon": "wifi 4"
+    },
+    {
+     "id": "ei2f8",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (wifi) && (rssi <= -55 && rssi > -65)",
+     "blink": 0,
+     "x": 120,
+     "y": 1,
+     "icon": "wifi 3"
+    },
+    {
+     "id": "ei2f9",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (wifi) && (rssi <= -65 && rssi > -75)",
+     "blink": 0,
+     "x": 120,
+     "y": 1,
+     "icon": "wifi 2"
+    },
+    {
+     "id": "ei2fa",
+     "type": "icon",
+     "name": "Wi-Fi",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (wifi) && (rssi <= -75)",
+     "blink": 0,
+     "x": 120,
+     "y": 1,
+     "icon": "wifi 1"
+    },
+    {
+     "id": "ei2fb",
+     "type": "icon",
+     "name": "Wi-Fi brak",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (!wifi)",
+     "blink": 0,
+     "x": 120,
+     "y": 3,
+     "icon": "wifi brak"
+    },
+    {
+     "id": "ei2fc",
+     "type": "icon",
+     "name": "dzwonek alarmu",
+     "color": 0,
+     "visibleIf": "(timeValid) && (wifiConf) && (alarm && (!unacked || blink(500)))",
+     "blink": 0,
+     "x": 82,
+     "y": 2,
+     "icon": "dzwonek"
+    },
+    {
+     "id": "ei2fd",
+     "type": "icon",
+     "name": "dzwonek alarmu",
+     "color": 0,
+     "visibleIf": "(timeValid) && (!wifiConf) && (alarm && (!unacked || blink(500)))",
+     "blink": 0,
+     "x": 92,
+     "y": 2,
+     "icon": "dzwonek"
+    },
+    {
+     "id": "ei2fe",
+     "type": "icon",
+     "name": "dzwonek alarmu",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (wifiConf) && (alarm && (!unacked || blink(500)))",
+     "blink": 0,
+     "x": 110,
+     "y": 2,
+     "icon": "dzwonek"
+    },
+    {
+     "id": "ei2ff",
+     "type": "icon",
+     "name": "dzwonek alarmu",
+     "color": 0,
+     "visibleIf": "(!timeValid) && (!wifiConf) && (alarm && (!unacked || blink(500)))",
+     "blink": 0,
+     "x": 120,
+     "y": 2,
+     "icon": "dzwonek"
+    },
+    {
+     "id": "ei2fg",
+     "type": "list",
+     "name": "ustawienia: Pompy",
+     "color": 1,
+     "visibleIf": "",
+     "blink": 0,
+     "x": 0,
+     "y": 12,
+     "w": 128,
+     "rowH": 12,
+     "rows": 4,
+     "font": "helvR08_te",
+     "sel": "selGrp",
+     "items": "< Wstecz\nWłączone|{pumps ? \"[x]\" : \"[ ]\"}"
+    },
+    {
+     "id": "ei2fh",
+     "type": "box",
+     "name": "komunikat: tło",
+     "color": 0,
+     "visibleIf": "ms < toastUntil",
+     "blink": 0,
+     "x": 13,
+     "y": 47,
+     "w": 102,
+     "h": 16
+    },
+    {
+     "id": "ei2fi",
+     "type": "rbox",
+     "name": "komunikat",
+     "color": 1,
+     "visibleIf": "ms < toastUntil",
+     "blink": 0,
+     "x": 14,
+     "y": 48,
+     "w": 100,
+     "h": 14,
+     "r": 3
+    },
+    {
+     "id": "ei2fj",
+     "type": "text",
+     "name": "komunikat: tekst",
+     "color": 0,
+     "visibleIf": "ms < toastUntil",
+     "blink": 0,
+     "x": 64,
+     "y": 58,
+     "text": "{toast:s}",
+     "font": "helvR08_te",
+     "align": "center"
+    }
+   ],
+   "transitions": [
+    {
+     "id": "ti2fk",
+     "event": "cond",
+     "ms": 15000,
+     "cond": "true",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "target": "",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fl",
+     "event": "cond",
+     "ms": 15000,
+     "cond": "true",
+     "actions": "apSeen = apActive",
+     "target": "",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fm",
+     "event": "cond",
+     "ms": 15000,
+     "cond": "ms - lastIn > 60000",
+     "actions": "",
+     "target": "sb7",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fn",
+     "event": "cw",
+     "ms": 15000,
+     "cond": "",
+     "actions": "selGrp = min(selGrp + 1, 1); lastIn = ms",
+     "target": "",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fo",
+     "event": "ccw",
+     "ms": 15000,
+     "cond": "",
+     "actions": "selGrp = max(selGrp - 1, 0); lastIn = ms",
+     "target": "",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fp",
+     "event": "click",
+     "ms": 15000,
+     "cond": "selGrp == 0",
+     "actions": "lastIn = ms",
+     "target": "sba",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fq",
+     "event": "click",
+     "ms": 15000,
+     "cond": "selGrp == 1",
+     "actions": "pumps = !pumps; toast = \"Zapisano\"; toastUntil = ms + 1800; lastIn = ms",
+     "target": "",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fr",
+     "event": "long",
+     "ms": 15000,
+     "cond": "",
+     "actions": "lastIn = ms",
+     "target": "sba",
+     "anim": "none"
+    },
+    {
+     "id": "ti2fs",
+     "event": "boot",
+     "ms": 15000,
+     "cond": "",
+     "actions": "lastIn = ms",
+     "target": "sba",
+     "anim": "none"
+    }
+   ]
   },
   {
    "id": "sbc",
@@ -8441,7 +8827,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -8807,7 +9193,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -9173,7 +9559,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -9530,7 +9916,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -10129,7 +10515,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -10542,7 +10928,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -10938,7 +11324,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -11286,7 +11672,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },
@@ -11647,7 +12033,7 @@
      "event": "cond",
      "ms": 15000,
      "cond": "true",
-     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
+     "actions": "piecJest = rola1 == 1 || rola2 == 1\nbojlerJest = rola1 == 2 || rola2 == 2\npiecOk = piecOdczyt && piecJest\nbojlerOk = bojlerOdczyt && bojlerJest\nalP = piecOk && (piec >= alarmPiec || (alP && piec >= alarmPiec - alarmHyst))\nalB = bojlerOk && (bojler >= alarmBoiler || (alB && bojler >= alarmBoiler - alarmHyst))\nalLow = lowPiec > 0 && piecOk && piec < lowPiec + 5 && (alLow || (lowArmed && piec <= lowPiec))\nlowArmed = lowPiec > 0 && piecOk && !alLow && (lowArmed || piec >= lowPiec + 5)\nalarm = alP || alB || alLow || !piecOk || !bojlerOk\nalMask = alP + alB * 2 + alLow * 4 + !piecOk * 8 + !bojlerOk * 16\nackMask = ackMask & alMask\nun = alMask & ~ackMask\nunacked = un != 0\nnAl = (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) + (un >> 3 & 1) + (un >> 4 & 1)\nalK = round(ms / 2500 - 0.5) % max(nAl, 1)\nalKod = (un & 1) && alK == 0 ? 1 : (un & 2) && alK == (un & 1) ? 2 : (un & 4) && alK == (un & 1) + (un >> 1 & 1) ? 3 : (un & 8) && alK == (un & 1) + (un >> 1 & 1) + (un >> 2 & 1) ? 4 : 5\npCO = pumps && coEnabled && (!piecOk || alP || (antiFreeze > 0 && piec <= antiFreeze) || piec >= coOn || (pCO && piec >= coOn - coHyst))\npCWU = pumps && cwuEnabled && piecOk && bojlerOk && piec - bojler >= 2 && ((alP && bojler < alarmBoiler - alarmHyst) || (bojler < cwuTarget && (pCWU || (piec - bojler >= cwuDelta && bojler <= cwuTarget - cwuHyst))))\nminP = piecOk ? min(minP, piec) : minP\nmaxP = piecOk ? max(maxP, piec) : maxP\nminB = bojlerOk ? min(minB, bojler) : minB\nmaxB = bojlerOk ? max(maxB, bojler) : maxB\nnetProblem = !wifiConf || !wifi || (fbConf && (fbBlad || (!fbCzeka && !fbOk))) || chip > 75\nsysVis = netProblem || ms < infoUntil\napSeen = apSeen && apActive",
      "target": "",
      "anim": "none"
     },

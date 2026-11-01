@@ -12,6 +12,8 @@ struct Settings {
   bool  buzzer      = true;
   bool  buzzerPassive = false; // pasywny (bez generatora) - sterowany tonem PWM
   bool  buzzerLow     = false; // modul zalaczany stanem niskim
+  // Pompy: false = no pump control, pump screen, menu groups or panel sections
+  bool  pumps       = true;
   // Pompa CO
   bool  coEnabled   = true;
   float coOn        = 40;     // zalaczenie od tej temperatury pieca
