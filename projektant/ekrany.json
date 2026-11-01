@@ -2509,7 +2509,8 @@
      "limit": "alarmPiec",
      "sampleMs": 500,
      "scale": true,
-     "thick": true
+     "thick": false,
+     "bars": true
     },
     {
      "id": "edz",
@@ -2561,6 +2562,18 @@
      "text": "--.-",
      "font": "5x7_tf",
      "align": "left"
+    },
+    {
+     "id": "hbgee3",
+     "type": "box",
+     "name": "zakres: tło",
+     "color": 0,
+     "visibleIf": "",
+     "blink": 0,
+     "x": 16,
+     "y": 53,
+     "w": 19,
+     "h": 9
     },
     {
      "id": "ee3",
@@ -3170,7 +3183,8 @@
      "limit": "alarmBoiler",
      "sampleMs": 500,
      "scale": true,
-     "thick": true
+     "thick": false,
+     "bars": true
     },
     {
      "id": "eem",
@@ -3222,6 +3236,18 @@
      "text": "--.-",
      "font": "5x7_tf",
      "align": "left"
+    },
+    {
+     "id": "hbgeeq",
+     "type": "box",
+     "name": "zakres: tło",
+     "color": 0,
+     "visibleIf": "",
+     "blink": 0,
+     "x": 16,
+     "y": 53,
+     "w": 19,
+     "h": 9
     },
     {
      "id": "eeq",

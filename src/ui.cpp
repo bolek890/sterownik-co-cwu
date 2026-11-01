@@ -232,18 +232,20 @@ static void drawChart(const Ctx &c, uint8_t id) {
   snprintf(title, sizeof(title), "%s  %u h", id == PIEC ? "Piec" : "Bojler", c.cfg.chartHours);
   drawHeader(c, title);
 
+  // bar chart: BAR_W px wide bars with a 1 px gap, filling the inside of the frame exactly
   const int X0 = 15, Y0 = 12, W = 113, H = 51, PW = W - 2;
+  const int BAR_W = 3, STEP = BAR_W + 1, NB = (PW + 1) / STEP;
   const float limit = id == PIEC ? c.cfg.alarmPiec : c.cfg.alarmBoiler;
   int n = controllerHistory(id, histBuf, HISTORY_LEN);
   int span = c.cfg.chartHours * 60;
 
-  // usrednianie probek do kolumn pikseli
-  static float val[PW];
+  // average the samples into bars
+  static float val[NB];
   bool any = false;
   float lo = 1e9, hi = -1e9;
-  for (int px = 0; px < PW; px++) {
-    int from = n - span + px * span / PW;
-    int to = n - span + (px + 1) * span / PW;
+  for (int px = 0; px < NB; px++) {
+    int from = n - span + px * span / NB;
+    int to = n - span + (px + 1) * span / NB;
     if (to <= from) to = from + 1;
     float sum = 0;
     int cnt = 0;
@@ -282,27 +284,20 @@ static void drawChart(const Ctx &c, uint8_t id) {
     if (m != hi && m != lo)
       for (int x = X0 + 2; x < X0 + W - 1; x += 4) u8g2.drawPixel(x, y);
   }
-  // temperatura graniczna - linia przerywana
+  // bars from the bottom of the frame up to the value
+  const int yMax = Y0 + H - 2;
+  for (int b = 0; b < NB; b++) {
+    if (isnan(val[b])) continue;
+    int y = constrain(yOf(val[b]), Y0 + 1, yMax);
+    u8g2.drawBox(X0 + 1 + b * STEP, y, BAR_W, yMax - y + 1);
+  }
+
+  // alarm limit - dashed line, XOR so it stays visible across the bars
   int yl = yOf(limit);
+  u8g2.setDrawColor(2);
   for (int x = X0 + 1; x < X0 + W - 1; x++)
     if ((x / 3) % 2 == 0) u8g2.drawPixel(x, yl);
-
-  // dane - line 2 px thick: the same line again one pixel lower (kept inside the frame)
-  const int yMax = Y0 + H - 2;
-  int prevY = -1;
-  for (int px = 0; px < PW; px++) {
-    if (isnan(val[px])) { prevY = -1; continue; }
-    int y = yOf(val[px]);
-    int x = X0 + 1 + px;
-    if (prevY >= 0) {
-      u8g2.drawLine(x - 1, prevY, x, y);
-      u8g2.drawLine(x - 1, min(prevY + 1, yMax), x, min(y + 1, yMax));
-    } else {
-      u8g2.drawPixel(x, y);
-      u8g2.drawPixel(x, min(y + 1, yMax));
-    }
-    prevY = y;
-  }
+  u8g2.setDrawColor(1);
 
   // biezaca wartosc w ramce
   const SensorState &s = c.st.s[id];
@@ -319,8 +314,12 @@ static void drawChart(const Ctx &c, uint8_t id) {
   u8g2.drawUTF8(X0 + 5, Y0 + 10, b);
   u8g2.setDrawColor(1);
 
+  // time span label, on a cleared background so the bars do not run through it
   u8g2.setFont(F_SMALL);
   snprintf(b, sizeof(b), "-%uh", c.cfg.chartHours);
+  u8g2.setDrawColor(0);
+  u8g2.drawBox(X0 + 1, Y0 + H - 10, u8g2.getStrWidth(b) + 3, 9);
+  u8g2.setDrawColor(1);
   u8g2.drawStr(X0 + 3, Y0 + H - 3, b);
 }
 
