@@ -25,7 +25,6 @@ struct Settings {
   // Wyswietlacz
   uint16_t backlight  = 60;   // 0-255
   uint16_t contrast   = 60;   // 0-255, 60 sprawdzone na GMG12864-06D
-  uint16_t screenSec  = 15;   // czas jednego ekranu
   uint16_t chartHours = 6;    // zakres wykresu na LCD
   // Dane
   uint16_t firebaseMin = 5;   // jak stare timerDelayFirebase = 5 min

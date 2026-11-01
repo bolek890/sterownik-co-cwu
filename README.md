@@ -10,7 +10,8 @@ te same ścieżki i format danych w Firebase, ten sam sposób liczenia trendu i 
 ## Możliwości
 
 - **Ekran** 128×64 (ST7565R): temperatury z trendem jak w starym sterowniku (strzałka, Δ, czas od zmiany trendu),
-  wykresy pieca i bojlera, statystyki dnia, stan pomp. Ekrany przewijają się same, enkoderem albo przyciskiem BOOT.
+  wykresy pieca i bojlera, statystyki dnia, stan pomp. Domyślnie stoi ekran z temperaturami; inne ekrany
+  wybiera się enkoderem albo przyciskiem BOOT, a po 2 minutach ekran sam wraca do temperatur.
   „Sieć i system” pokazuje się tylko przy problemie z siecią, Firebase albo przegrzaniem układu.
 - **Menu na enkoderze** (kliknięcie): wszystkie ustawienia z podglądem na żywo, przypisanie czujników
   (piec / bojler) z bieżącą temperaturą, sieć konfiguracyjna, informacje, zerowanie statystyk.

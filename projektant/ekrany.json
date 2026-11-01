@@ -393,16 +393,6 @@
    "period": 60
   },
   {
-   "name": "screenSec",
-   "type": "int",
-   "value": 15,
-   "min": 3,
-   "max": 300,
-   "step": 1,
-   "sim": "none",
-   "period": 60
-  },
-  {
    "name": "chartHours",
    "type": "int",
    "value": 6,
@@ -2241,15 +2231,6 @@
      "anim": "left"
     },
     {
-     "id": "tj4",
-     "event": "cond",
-     "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
-     "actions": "",
-     "target": "sb5",
-     "anim": "none"
-    },
-    {
      "id": "tj5",
      "event": "click",
      "ms": 15000,
@@ -2904,10 +2885,10 @@
      "id": "tk1",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tk2",
@@ -3564,10 +3545,10 @@
      "id": "tky",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tkz",
@@ -4362,10 +4343,10 @@
      "id": "tlv",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tlw",
@@ -5226,8 +5207,8 @@
      "ms": 15000,
      "cond": "!(wyjsciaPomp)",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tms",
@@ -5242,10 +5223,10 @@
      "id": "tmt",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tmu",
@@ -6043,8 +6024,8 @@
      "ms": 15000,
      "cond": "!(sysVis)",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tnq",
@@ -6059,10 +6040,10 @@
      "id": "tnr",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "tns",
@@ -6699,8 +6680,8 @@
      "ms": 15000,
      "cond": "!(apActive)",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "ton",
@@ -6715,10 +6696,10 @@
      "id": "too",
      "event": "cond",
      "ms": 15000,
-     "cond": "!unacked && ms >= hold && t >= screenSec * 1000",
+     "cond": "t >= 120000",
      "actions": "",
-     "target": "sb5",
-     "anim": "none"
+     "target": "say",
+     "anim": "right"
     },
     {
      "id": "top",
@@ -9145,7 +9126,7 @@
      "rows": 4,
      "font": "helvR08_te",
      "sel": "selGrp",
-     "items": "< Wstecz\nPodświetlenie|{backlight}\nKontrast|{contrast}\nCzas ekranu|{screenSec} s\nZakres wykresu|{chartHours} h"
+     "items": "< Wstecz\nPodświetlenie|{backlight}\nKontrast|{contrast}\nZakres wykresu|{chartHours} h"
     },
     {
      "id": "eur",
@@ -9219,7 +9200,7 @@
      "event": "cw",
      "ms": 15000,
      "cond": "",
-     "actions": "selGrp = min(selGrp + 1, 4); lastIn = ms",
+     "actions": "selGrp = min(selGrp + 1, 3); lastIn = ms",
      "target": "",
      "anim": "none"
     },
@@ -9260,19 +9241,10 @@
      "anim": "none"
     },
     {
-     "id": "tv2",
-     "event": "click",
-     "ms": 15000,
-     "cond": "selGrp == 3",
-     "actions": "ef = 12; ev = screenSec; emin = 3; emax = 300; estep = 1; ename = \"Czas ekranu\"; eunit = \"s\"; ezero = false; egrp = 3; lastIn = ms",
-     "target": "sbg",
-     "anim": "none"
-    },
-    {
      "id": "tv3",
      "event": "click",
      "ms": 15000,
-     "cond": "selGrp == 4",
+     "cond": "selGrp == 3",
      "actions": "ef = 13; ev = chartHours; emin = 1; emax = 24; estep = 1; ename = \"Zakres wykresu\"; eunit = \"h\"; ezero = false; egrp = 3; lastIn = ms",
      "target": "sbg",
      "anim": "none"
@@ -9939,7 +9911,7 @@
      "rows": 4,
      "font": "helvR08_te",
      "sel": "selGrp",
-     "items": "< Wstecz\nPodświetlenie|{backlight}\nKontrast|{contrast}\nCzas ekranu|{screenSec} s\nZakres wykresu|{chartHours} h"
+     "items": "< Wstecz\nPodświetlenie|{backlight}\nKontrast|{contrast}\nZakres wykresu|{chartHours} h"
     },
     {
      "id": "ewo",
@@ -10202,7 +10174,7 @@
      "event": "click",
      "ms": 15000,
      "cond": "",
-     "actions": "alarmPiec = ef == 0 ? ev : alarmPiec; alarmBoiler = ef == 1 ? ev : alarmBoiler; alarmHyst = ef == 2 ? ev : alarmHyst; lowPiec = ef == 3 ? ev : lowPiec; coOn = ef == 4 ? ev : coOn; coHyst = ef == 5 ? ev : coHyst; antiFreeze = ef == 6 ? ev : antiFreeze; cwuTarget = ef == 7 ? ev : cwuTarget; cwuDelta = ef == 8 ? ev : cwuDelta; cwuHyst = ef == 9 ? ev : cwuHyst; backlight = ef == 10 ? ev : backlight; contrast = ef == 11 ? ev : contrast; screenSec = ef == 12 ? ev : screenSec; chartHours = ef == 13 ? ev : chartHours; firebaseMin = ef == 14 ? ev : firebaseMin; trendMin = ef == 15 ? ev : trendMin; toast = \"Zapisano\"; toastUntil = ms + 1800; lastIn = ms",
+     "actions": "alarmPiec = ef == 0 ? ev : alarmPiec; alarmBoiler = ef == 1 ? ev : alarmBoiler; alarmHyst = ef == 2 ? ev : alarmHyst; lowPiec = ef == 3 ? ev : lowPiec; coOn = ef == 4 ? ev : coOn; coHyst = ef == 5 ? ev : coHyst; antiFreeze = ef == 6 ? ev : antiFreeze; cwuTarget = ef == 7 ? ev : cwuTarget; cwuDelta = ef == 8 ? ev : cwuDelta; cwuHyst = ef == 9 ? ev : cwuHyst; backlight = ef == 10 ? ev : backlight; contrast = ef == 11 ? ev : contrast; chartHours = ef == 13 ? ev : chartHours; firebaseMin = ef == 14 ? ev : firebaseMin; trendMin = ef == 15 ? ev : trendMin; toast = \"Zapisano\"; toastUntil = ms + 1800; lastIn = ms",
      "target": "sbh",
      "anim": "none"
     },

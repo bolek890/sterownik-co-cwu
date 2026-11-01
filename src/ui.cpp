@@ -25,6 +25,7 @@ static U8G2_ST7565_ERC12864_ALT_F_4W_HW_SPI u8g2(U8G2_R0, PIN_LCD_CS, PIN_LCD_DC
 
 const uint32_t SLIDE_MS = 400;
 const uint32_t MANUAL_HOLD_MS = 60000;   // po nacisnieciu BOOT ekrany stoja 1 min
+const uint32_t RETURN_MAIN_MS = 120000;  // other screens return to the main one after 2 min
 
 struct Ctx {
   CtrlState st;
@@ -1310,9 +1311,9 @@ void uiLoop() {
     slideTo(SCREEN_AP, c);
     return;
   }
-  // Ekran przestal byc widoczny (np. problem z siecia minal) - przejdz plynnie dalej
+  // Screen left the loop (e.g. the network problem is gone) - back to the main screen
   if (!SCREENS[current].visible()) {
-    slideTo(nextVisible(current), c);
+    slideTo(0, c, -1);
     return;
   }
   if (d) {
@@ -1326,8 +1327,9 @@ void uiLoop() {
     slideTo(0, c, -1);
     return;
   }
-  if (!c.unacked && !held && c.now - screenStart >= c.cfg.screenSec * 1000UL) {
-    slideTo(nextVisible(current), c);
+  // The main screen (temperatures and trend) stays; any other one returns to it after 2 min
+  if (current != 0 && c.now - screenStart >= RETURN_MAIN_MS) {
+    slideTo(0, c, -1);
     return;
   }
   if (!frameDue(c, eb || bb)) return;

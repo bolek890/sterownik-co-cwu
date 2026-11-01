@@ -25,7 +25,6 @@ const SettingField SETTINGS_FIELDS[] = {
   FLD(cwuHyst,     ST_FLOAT, 1, 15,   0.5, "Pompa CWU", "Histereza", "Histereza", "°C", SF_NONE),
   FLD(backlight,   ST_INT,   0, 255,  1,   "Wyświetlacz", "Podświetlenie (0–255)", "Podświetlenie", "", SF_NONE),
   FLD(contrast,    ST_INT,   0, 255,  1,   "Wyświetlacz", "Kontrast (0–255)", "Kontrast", "", SF_NONE),
-  FLD(screenSec,   ST_INT,   3, 300,  1,   "Wyświetlacz", "Czas wyświetlania ekranu", "Czas ekranu", "s", SF_NONE),
   FLD(chartHours,  ST_INT,   1, 24,   1,   "Wyświetlacz", "Zakres wykresu na ekranie", "Zakres wykresu", "h", SF_NONE),
   FLD(firebaseMin, ST_INT,   1, 60,   1,   "Dane", "Wysyłka do Firebase co", "Firebase co", "min", SF_NONE),
   FLD(trendMin,    ST_INT,   1, 60,   1,   "Dane", "Próbkowanie trendu co", "Trend co", "min", SF_NONE),
