@@ -287,14 +287,20 @@ static void drawChart(const Ctx &c, uint8_t id) {
   for (int x = X0 + 1; x < X0 + W - 1; x++)
     if ((x / 3) % 2 == 0) u8g2.drawPixel(x, yl);
 
-  // dane
+  // dane - line 2 px thick: the same line again one pixel lower (kept inside the frame)
+  const int yMax = Y0 + H - 2;
   int prevY = -1;
   for (int px = 0; px < PW; px++) {
     if (isnan(val[px])) { prevY = -1; continue; }
     int y = yOf(val[px]);
     int x = X0 + 1 + px;
-    if (prevY >= 0) u8g2.drawLine(x - 1, prevY, x, y);
-    else u8g2.drawPixel(x, y);
+    if (prevY >= 0) {
+      u8g2.drawLine(x - 1, prevY, x, y);
+      u8g2.drawLine(x - 1, min(prevY + 1, yMax), x, min(y + 1, yMax));
+    } else {
+      u8g2.drawPixel(x, y);
+      u8g2.drawPixel(x, min(y + 1, yMax));
+    }
     prevY = y;
   }
 

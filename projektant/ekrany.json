@@ -2508,7 +2508,8 @@
      "max": "",
      "limit": "alarmPiec",
      "sampleMs": 500,
-     "scale": true
+     "scale": true,
+     "thick": true
     },
     {
      "id": "edz",
@@ -3168,7 +3169,8 @@
      "max": "",
      "limit": "alarmBoiler",
      "sampleMs": 500,
-     "scale": true
+     "scale": true,
+     "thick": true
     },
     {
      "id": "eem",
