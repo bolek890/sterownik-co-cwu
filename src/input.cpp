@@ -12,9 +12,10 @@ static portMUX_TYPE encMux = portMUX_INITIALIZER_UNLOCKED;
 static volatile int32_t detents = 0;
 static volatile uint8_t qstate = 0;
 static volatile int8_t acc = 0;
+static int8_t encClk = -1, encDt = -1;   // from devcfg (page /config), set in inputBegin()
 
 static inline uint8_t readAB() {
-  return (digitalRead(PIN_ENC_CLK) << 1) | digitalRead(PIN_ENC_DT);
+  return (digitalRead(encClk) << 1) | digitalRead(encDt);
 }
 
 static void IRAM_ATTR encoderIsr() {
@@ -49,7 +50,7 @@ struct Button {
   uint32_t downMs;
 };
 
-static Button encBtn = {PIN_ENC_SW, false, false, 0};
+static Button encBtn = {-1, false, false, 0};   // pin set in inputBegin()
 static Button bootBtn = {PIN_BUTTON, false, false, 0};
 
 static ButtonEvent poll(Button &b) {
@@ -99,12 +100,15 @@ void inputBegin() {
   resetPin = devcfg().pinResetBtn;
   if (resetPin >= 0) pinMode(resetPin, INPUT_PULLUP);
   pinMode(PIN_BUTTON, INPUT_PULLUP);
-  if (PIN_ENC_SW >= 0) pinMode(PIN_ENC_SW, INPUT_PULLUP);
-  if (PIN_ENC_CLK >= 0 && PIN_ENC_DT >= 0) {
-    pinMode(PIN_ENC_CLK, INPUT_PULLUP);
-    pinMode(PIN_ENC_DT, INPUT_PULLUP);
+  encBtn.pin = devcfg().pinEncSw;
+  if (encBtn.pin >= 0) pinMode(encBtn.pin, INPUT_PULLUP);
+  encClk = devcfg().pinEncClk;
+  encDt = devcfg().pinEncDt;
+  if (encClk >= 0 && encDt >= 0) {
+    pinMode(encClk, INPUT_PULLUP);
+    pinMode(encDt, INPUT_PULLUP);
     qstate = readAB();
-    attachInterrupt(digitalPinToInterrupt(PIN_ENC_CLK), encoderIsr, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(PIN_ENC_DT), encoderIsr, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(encClk), encoderIsr, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(encDt), encoderIsr, CHANGE);
   }
 }

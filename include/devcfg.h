@@ -10,6 +10,7 @@ struct DeviceConfig {
   String hostname, webUser, webPass, otaPass;
   int8_t pinLcdSck, pinLcdMosi, pinLcdCs, pinLcdDc, pinLcdRst, pinBacklight, pinOneWire;
   int8_t pinBuzzer, pinResetBtn;
+  int8_t pinEncClk, pinEncDt, pinEncSw;
 };
 
 struct PinField {

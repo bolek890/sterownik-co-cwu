@@ -13,6 +13,9 @@ const PinField PIN_FIELDS[] = {
   {"ow",   "Termometry DS18B20",       &DeviceConfig::pinOneWire,   PIN_ONEWIRE,   false},
   {"buzz", "Brzęczyk alarmu",          &DeviceConfig::pinBuzzer,    PIN_BUZZER,    true},
   {"rbtn", "Przycisk reset (do GND)",  &DeviceConfig::pinResetBtn,  PIN_RESET_BTN, true},
+  {"eclk", "Enkoder CLK",              &DeviceConfig::pinEncClk,    PIN_ENC_CLK,   true},
+  {"edt",  "Enkoder DT",               &DeviceConfig::pinEncDt,     PIN_ENC_DT,    true},
+  {"esw",  "Enkoder SW (przycisk)",    &DeviceConfig::pinEncSw,     PIN_ENC_SW,    true},
 };
 const size_t PIN_FIELD_COUNT = sizeof(PIN_FIELDS) / sizeof(PIN_FIELDS[0]);
 
@@ -74,10 +77,9 @@ bool devcfgValidate(const DeviceConfig &c, String &err) {
     }
   }
 
-  // piny: dozwolone, bez powtorzen, bez kolizji z enkoderem i wyjsciami z config.h
-  const int fixed[] = {PIN_BUTTON, PIN_ENC_CLK, PIN_ENC_DT, PIN_ENC_SW, PIN_PUMP_CO, PIN_PUMP_CWU};
-  const char *fixedNames[] = {"przycisk BOOT", "enkoder CLK", "enkoder DT", "enkoder SW",
-                              "pompa CO", "pompa CWU"};
+  // piny: dozwolone, bez powtorzen, bez kolizji z przyciskiem BOOT i wyjsciami z config.h
+  const int fixed[] = {PIN_BUTTON, PIN_PUMP_CO, PIN_PUMP_CWU};
+  const char *fixedNames[] = {"przycisk BOOT", "pompa CO", "pompa CWU"};
   for (size_t i = 0; i < PIN_FIELD_COUNT; i++) {
     const PinField &f = PIN_FIELDS[i];
     int p = c.*f.ptr;

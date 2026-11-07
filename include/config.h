@@ -1,6 +1,7 @@
 // Konfiguracja sprzetu i wartosci domyslne sekretow.
 // Sekrety ustawia sie w pliku .env (patrz .env.example), nie tutaj.
-// Piny ekranu i termometrow mozna tez zmienic na stronie /config (zapis w sterowniku).
+// Piny ekranu, termometrow, enkodera, brzeczyka i przycisku reset mozna tez zmienic
+// na stronie /config (zapis w sterowniku).
 #pragma once
 #include <Arduino.h>
 

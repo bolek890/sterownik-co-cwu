@@ -23,7 +23,7 @@ te same ścieżki i format danych w Firebase, ten sam sposób liczenia trendu i 
   pompa bojlera nigdy nie pracuje, gdy piec jest zimniejszy od bojlera.
 - **Panel WWW** `/panel`: odczyty, wykres 1–24 h, statystyki dziś/wczoraj, wszystkie ustawienia.
 - **Konfiguracja** `/config`: Wi-Fi (z wyszukiwaniem sieci), Firebase, hasła, piny ekranu, termometrów,
-  brzęczyka i przycisku reset, aktualizacja firmware przez przeglądarkę.
+  enkodera, brzęczyka i przycisku reset, aktualizacja firmware przez przeglądarkę.
 - **Sieć konfiguracyjna** `Sterownik-CO-xxxx` (192.168.4.1): włącza się sama, gdy nie ma Wi-Fi, albo z menu.
 - **Firebase**: wysyłka co 5 min do `/readings/<epoch>` (format starego sterownika), logowanie anonimowe
   albo e-mailem. Błędne dane logowania nie blokują Wi-Fi ani ekranu.
@@ -46,7 +46,7 @@ te same ścieżki i format danych w Firebase, ten sam sposób liczenia trendu i 
 | Przycisk BOOT (na płytce) | GPIO0 | GPIO9 |
 
 Wyświetlacz: GMG12864-06D (ST7565R), zasilanie 3,3 V. Enkoder KY-040 / EC11 zasilany z 3,3 V.
-Piny ekranu, termometrów, brzęczyka i przycisku reset można zmienić na stronie `/config`.
+Piny ekranu, termometrów, enkodera, brzęczyka i przycisku reset można zmienić na stronie `/config`.
 Przekaźniki pomp ustawia się w `include/config.h` (domyślnie wyłączone).
 
 ## Budowanie

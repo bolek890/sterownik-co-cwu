@@ -270,9 +270,6 @@ static void handleConfigGet(AsyncWebServerRequest *request) {
     o["optional"] = p.optional;
   }
   JsonObject fx = doc["fixedPins"].to<JsonObject>();
-  fx["Enkoder CLK"] = PIN_ENC_CLK;
-  fx["Enkoder DT"] = PIN_ENC_DT;
-  fx["Enkoder SW"] = PIN_ENC_SW;
   fx["Przycisk BOOT"] = PIN_BUTTON;
   sendJson(request, doc);
 }
