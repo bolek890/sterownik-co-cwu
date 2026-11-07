@@ -34,9 +34,10 @@ String apSsid() {
 }
 
 #if CONFIG_IDF_TARGET_ESP32C3
-// C3: GPIO 11-17 = pamiec flash, 18/19 = USB, 9 = BOOT (zajety jako przycisk)
+// C3: GPIO 11-17 = pamiec flash, 18/19 = USB, 9 = BOOT (button unless used here)
 static bool pinAllowed(int p) { return (p >= 0 && p <= 10) || p == 20 || p == 21; }
-const char *PIN_HINT = "Dozwolone GPIO: 0–10, 20, 21 (11–17 to pamięć flash, 18–19 USB, 9 BOOT).";
+const char *PIN_HINT = "Dozwolone GPIO: 0–10, 20, 21 (11–17 to pamięć flash, 18–19 USB). "
+                       "GPIO9 to przycisk BOOT – przypisanie go tutaj wyłącza funkcję przycisku.";
 #else
 // S3: BOOT(0), startowe (3, 45, 46), USB (19, 20), pamiec flash (26-32), brak wyprowadzenia (22-25)
 static bool pinAllowed(int p) {
@@ -77,9 +78,10 @@ bool devcfgValidate(const DeviceConfig &c, String &err) {
     }
   }
 
-  // piny: dozwolone, bez powtorzen, bez kolizji z przyciskiem BOOT i wyjsciami z config.h
-  const int fixed[] = {PIN_BUTTON, PIN_PUMP_CO, PIN_PUMP_CWU};
-  const char *fixedNames[] = {"przycisk BOOT", "pompa CO", "pompa CWU"};
+  // piny: dozwolone, bez powtorzen, bez kolizji z wyjsciami z config.h.
+  // The BOOT button pin may be used - the button function is then disabled (input.cpp).
+  const int fixed[] = {PIN_PUMP_CO, PIN_PUMP_CWU};
+  const char *fixedNames[] = {"pompa CO", "pompa CWU"};
   for (size_t i = 0; i < PIN_FIELD_COUNT; i++) {
     const PinField &f = PIN_FIELDS[i];
     int p = c.*f.ptr;

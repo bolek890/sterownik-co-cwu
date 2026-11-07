@@ -51,7 +51,7 @@ struct Button {
 };
 
 static Button encBtn = {-1, false, false, 0};   // pin set in inputBegin()
-static Button bootBtn = {PIN_BUTTON, false, false, 0};
+static Button bootBtn = {-1, false, false, 0};   // pin set in inputBegin()
 
 static ButtonEvent poll(Button &b) {
   if (b.pin < 0) return BTN_NONE;
@@ -99,7 +99,11 @@ bool resetButtonFired() {
 void inputBegin() {
   resetPin = devcfg().pinResetBtn;
   if (resetPin >= 0) pinMode(resetPin, INPUT_PULLUP);
-  pinMode(PIN_BUTTON, INPUT_PULLUP);
+  // BOOT button only when its GPIO is not assigned to something else on /config
+  bootBtn.pin = PIN_BUTTON;
+  for (size_t i = 0; i < PIN_FIELD_COUNT; i++)
+    if (devcfg().*PIN_FIELDS[i].ptr == PIN_BUTTON) bootBtn.pin = -1;
+  if (bootBtn.pin >= 0) pinMode(bootBtn.pin, INPUT_PULLUP);
   encBtn.pin = devcfg().pinEncSw;
   if (encBtn.pin >= 0) pinMode(encBtn.pin, INPUT_PULLUP);
   encClk = devcfg().pinEncClk;
