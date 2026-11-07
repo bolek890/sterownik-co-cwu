@@ -236,6 +236,13 @@ static void initOta() {
 // ---------------------------------------------------------------------------
 // Punkt dostepu do konfiguracji
 // ---------------------------------------------------------------------------
+#if CONFIG_IDF_TARGET_ESP32C3
+// C3 SuperMini boards have a poorly matched antenna: at full power they often fail to connect
+static const wifi_power_t STA_TX_POWER = WIFI_POWER_8_5dBm;
+#else
+static const wifi_power_t STA_TX_POWER = WIFI_POWER_19_5dBm;   // zasieg do routera
+#endif
+
 static void startAp(bool manual) {
   apManual = manual;
   if (apActive) return;
@@ -254,7 +261,7 @@ static void stopAp() {
   dns.stop();
   WiFi.softAPdisconnect(true);
   WiFi.mode(WIFI_STA);
-  WiFi.setTxPower(WIFI_POWER_19_5dBm);  // zasieg do routera
+  WiFi.setTxPower(STA_TX_POWER);
   WiFi.setAutoReconnect(true);
   apActive = false;
   apManual = false;
@@ -409,6 +416,14 @@ void netBegin() {
   WiFi.setSleep(true);   // uspienie modemu miedzy ramkami routera (WIFI_PS_MIN_MODEM)
   WiFi.setHostname(d.hostname.c_str());
   WiFi.setAutoReconnect(true);
+  WiFi.setTxPower(STA_TX_POWER);
+  // log why the connection fails (only when the reason changes, retries repeat it)
+  WiFi.onEvent([](WiFiEvent_t, WiFiEventInfo_t info) {
+    static uint8_t lastReason = 0;
+    uint8_t r = info.wifi_sta_disconnected.reason;
+    if (r != lastReason) Serial.printf("[wifi] brak polaczenia, powod %u\n", r);
+    lastReason = r;
+  }, ARDUINO_EVENT_WIFI_STA_DISCONNECTED);
   if (d.wifiSsid.length()) WiFi.begin(d.wifiSsid.c_str(), d.wifiPass.c_str());
   else Serial.println("[wifi] brak sieci - uruchamiam siec konfiguracyjna");
   configTzTime(TZ_INFO, NTP_SERVER);
