@@ -12,7 +12,7 @@ te same ścieżki i format danych w Firebase, ten sam sposób liczenia trendu i 
 - **Ekran** 128×64 (ST7565R): temperatury z trendem jak w starym sterowniku (strzałka, Δ, czas od zmiany trendu),
   wykresy pieca i bojlera, statystyki dnia, stan pomp. Domyślnie stoi ekran z temperaturami; inne ekrany
   wybiera się enkoderem albo przyciskiem BOOT, a po 2 minutach ekran sam wraca do temperatur.
-- **Sekcja pomp do wyłączenia**: Ustawienia → Pompy → Włączone (także w panelu WWW). Wyłączona = pompy nie są
+- **Sekcja pomp do wyłączenia**: Ustawienia → Pompy → Włączone (także na stronie `/config`). Wyłączona = pompy nie są
   sterowane, a ekran „Pompy”, grupy „Pompa CO” / „Pompa CWU” w menu oraz karta pomp w panelu są ukryte.
   „Sieć i system” pokazuje się tylko przy problemie z siecią, Firebase albo przegrzaniem układu.
 - **Menu na enkoderze** (kliknięcie): wszystkie ustawienia z podglądem na żywo, przypisanie czujników
@@ -21,8 +21,8 @@ te same ścieżki i format danych w Firebase, ten sam sposób liczenia trendu i 
   Miganie podświetlenia, brzęczyk (aktywny albo pasywny), wyciszanie enkoderem, BOOT albo w panelu.
 - **Pompy CO i CWU** (opcjonalne przekaźniki): progi z histerezą, ochrona przed przegrzaniem i zamarzaniem,
   pompa bojlera nigdy nie pracuje, gdy piec jest zimniejszy od bojlera.
-- **Panel WWW** `/panel`: odczyty, wykres 1–24 h, statystyki dziś/wczoraj, wszystkie ustawienia.
-- **Konfiguracja** `/config`: Wi-Fi (z wyszukiwaniem sieci), Firebase, hasła, piny ekranu, termometrów,
+- **Panel WWW** `/panel`: odczyty, wykres 1–24 h, statystyki dziś/wczoraj.
+- **Konfiguracja** `/config`: wszystkie ustawienia (alarmy, pompy, wyświetlacz, dane – zapis bez restartu), Wi-Fi (z wyszukiwaniem sieci), Firebase, hasła, piny ekranu, termometrów,
   enkodera, brzęczyka i przycisku reset, aktualizacja firmware przez przeglądarkę.
 - **Sieć konfiguracyjna** `Sterownik-CO-xxxx` (192.168.4.1): włącza się sama, gdy nie ma Wi-Fi, albo z menu.
 - **Firebase**: wysyłka co 5 min do `/readings/<epoch>` (format starego sterownika), logowanie anonimowe
@@ -100,7 +100,7 @@ src/controller.cpp      czujniki, trend, alarmy, pompy, statystyki, historia 24 
 src/net.cpp             Wi-Fi, sieć konfiguracyjna, NTP, Firebase, OTA
 src/web.cpp             serwer WWW i API (/api/status, /api/history, /api/settings, /api/config, /update)
 include/web_page.h      panel /panel
-include/config_page.h   strona /config
+include/config_page.h   strona /config (ustawienia i konfiguracja urządzenia)
 src/ui.cpp              ekran, menu, animacje, brzęczyk
 src/input.cpp           enkoder, BOOT, przycisk reset
 src/settings.cpp        ustawienia użytkownika (NVS)

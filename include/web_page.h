@@ -51,15 +51,8 @@ canvas{width:100%;height:260px;display:block}
 .pump:last-child{border:0}
 .tag{font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid var(--line)}
 .tag.on{background:var(--ok);color:#fff;border-color:var(--ok)}
-form fieldset{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 12px}
-legend{font-weight:600;padding:0 6px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:5px 0}
-.row input[type=number]{width:96px;font:inherit;padding:5px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);text-align:right}
-.row input[type=checkbox]{width:20px;height:20px}
-.formgrid{display:grid;gap:0 16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
 .kv div:nth-child(odd){color:var(--mut)}
-#msg{margin-left:10px}
 .okic{color:var(--ok);vertical-align:-3px}
 </style></head><body>
 <header><h1>Sterownik CO / CWU</h1><div><span id="conn" class="dot"></span><span id="clock" class="muted">—</span> · <a href="/config" style="color:inherit">Konfiguracja</a></div></header>
@@ -89,18 +82,15 @@ legend{font-weight:600;padding:0 6px}
 <p class="muted" id="pumpstats" style="margin:10px 0 0"></p></section>
 
 <section class="card"><h2>System</h2><div class="kv" id="sys"></div>
-<p style="margin:12px 0 0;display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="resetStats">Zeruj statystyki</button><button class="ghost" id="buzz">Test brzęczyka</button><span class="muted" id="buzzmsg"></span></p></section>
-
-<section class="card wide"><h2>Ustawienia</h2>
-<form id="settings"><div class="formgrid" id="fields"></div>
-<button type="submit">Zapisz</button><span id="msg" class="muted"></span></form></section>
+<p style="margin:12px 0 0;display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="resetStats">Zeruj statystyki</button><button class="ghost" id="buzz">Test brzęczyka</button><span class="muted" id="buzzmsg"></span></p>
+<p class="muted" style="margin:10px 0 0">Ustawienia alarmów, pomp i wyświetlacza: <a href="/config" style="color:inherit">Konfiguracja</a></p></section>
 </main>
 <script>
 const $=s=>document.querySelector(s);
 // "ptaszek" zamiast napisu OK (aria-label dla czytnikow ekranu)
 const CHECK='<svg class="okic" viewBox="0 0 16 16" width="16" height="16" role="img" aria-label="OK"><path d="M3 8.5l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const okOr=v=>v==='OK'?CHECK:v;
-let S=null,H=null,range=6;
+let LIM=null,H=null,range=6;   // LIM: alarm limits [piec, bojler] from /api/status
 const ARROW={up:'↗',down:'↘',flat:'→',none:'·'};
 const f1=v=>v==null?'—':Number(v).toFixed(1);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -135,6 +125,7 @@ async function status(){
     const s=await j('/api/status');$('#conn').className='dot on';
     $('#clock').textContent=s.time?new Date(s.time*1000).toLocaleString('pl-PL'):'brak czasu NTP';
     sensor('piec',s.piec);sensor('boiler',s.boiler);pump('co',s.pumps.co);pump('cwu',s.pumps.cwu);
+    const lim=[s.piec.limit,s.boiler.limit];if(String(lim)!==String(LIM)){LIM=lim;draw()}
     // pump section switched off in the settings: hide its card and daily pump line
     $('#c-pumps').style.display=s.pumpsEnabled?'':'none';$('#pumpstats').style.display=s.pumpsEnabled?'':'none';
     const a=$('#alarm');
@@ -156,7 +147,7 @@ function draw(){
   if(!H)return;const c=$('#chart'),dpr=devicePixelRatio||1,W=c.clientWidth,Hh=c.clientHeight;
   c.width=W*dpr;c.height=Hh*dpr;const g=c.getContext('2d');g.scale(dpr,dpr);
   const n=range*60,P=H.piec.slice(-n),B=H.boiler.slice(-n),L=[];
-  if(S){L.push([S.values.alarmPiec,css('--piec')]);L.push([S.values.alarmBoiler,css('--boiler')])}
+  if(LIM){L.push([LIM[0],css('--piec')]);L.push([LIM[1],css('--boiler')])}
   let lo=1e9,hi=-1e9;for(const v of P.concat(B))if(v!=null){lo=Math.min(lo,v);hi=Math.max(hi,v)}
   for(const[l]of L){lo=Math.min(lo,l);hi=Math.max(hi,l)}
   if(lo>hi){lo=0;hi=100}lo=Math.floor((lo-2)/5)*5;hi=Math.ceil((hi+2)/5)*5;if(hi-lo<10)hi=lo+10;
@@ -176,32 +167,15 @@ function draw(){
   if(!P.length){g.fillStyle=css('--mut');g.textAlign='center';g.fillText('Zbieranie danych — pierwsza próbka po 1 minucie',pl+w/2,pt+h/2)}
 }
 async function history(){try{H=await j('/api/history');draw()}catch(e){}}
-async function loadSettings(){
-  S=await j('/api/settings');const groups={};
-  for(const f of S.fields)(groups[f.group]=groups[f.group]||[]).push(f);
-  $('#fields').innerHTML=Object.entries(groups).filter(([gname])=>S.values.pumps||!/^Pompa /.test(gname)).map(([gname,fs])=>{
-    const note=(gname==='Pompa CO'&&!S.pumpOutputs.co)||(gname==='Pompa CWU'&&!S.pumpOutputs.cwu)?
-      '<div class="muted" style="font-size:13px">Brak skonfigurowanego wyjścia – logika działa tylko jako podgląd.</div>':'';
-    return `<fieldset><legend>${gname}</legend>${note}`+fs.map(f=>{const v=S.values[f.key];
-      const inp=f.type==='bool'?`<input type="checkbox" name="${f.key}" ${v?'checked':''}>`:
-        `<span><input type="number" name="${f.key}" value="${v}" min="${f.min}" max="${f.max}" step="${f.step}"> ${f.unit}</span>`;
-      return `<label class="row"><span>${f.label}</span>${inp}</label>`}).join('')+'</fieldset>'}).join('');
-  draw();
-}
-$('#settings').onsubmit=async e=>{e.preventDefault();const body=new URLSearchParams();
-  for(const f of S.fields){const el=e.target.elements[f.key];if(!el)continue;body.append(f.key,f.type==='bool'?(el.checked?'1':'0'):el.value)}
-  try{S=await j('/api/settings',{method:'POST',body});await loadSettings();status();$('#msg').innerHTML='Zapisano '+CHECK}
-  catch(err){$('#msg').textContent='Błąd zapisu: '+err.message}
-  setTimeout(()=>$('#msg').textContent='',4000)};
 $('#ack').onclick=async()=>{await fetch('/api/ack',{method:'POST'});status()};
 $('#resetStats').onclick=async()=>{if(confirm('Wyzerować statystyki dzisiejsze i wczorajsze?')){await fetch('/api/stats/reset',{method:'POST'});status()}};
 $('#buzz').onclick=async()=>{const m=$('#buzzmsg');
-  try{await j('/api/buzzer/test',{method:'POST'});m.textContent='Piszczy? Jeśli nie, zmień typ brzęczyka w ustawieniach (Alarmy) i spróbuj ponownie.'}
+  try{await j('/api/buzzer/test',{method:'POST'});m.textContent='Piszczy? Jeśli nie, zmień typ brzęczyka w Konfiguracji (Ustawienia → Alarmy) i spróbuj ponownie.'}
   catch(e){m.textContent='Brak pinu brzęczyka – ustaw go na stronie Konfiguracja.'}};
 $('#range').onclick=e=>{const h=e.target.dataset.h;if(!h)return;range=+h;
   document.querySelectorAll('#range button').forEach(b=>b.classList.toggle('sel',b===e.target));draw()};
 addEventListener('resize',draw);
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change',draw);
-loadSettings().catch(()=>{});status();history();
+status();history();
 setInterval(status,5000);setInterval(history,60000);
 </script></body></html>)HTML";

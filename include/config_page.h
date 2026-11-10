@@ -1,4 +1,4 @@
-// Strona konfiguracji /config: Wi-Fi, Firebase, dostep, piny, aktualizacja oprogramowania.
+// Strona konfiguracji /config: ustawienia, Wi-Fi, Firebase, dostep, piny, aktualizacja oprogramowania.
 // Bez zewnetrznych zasobow - dziala tez w sieci konfiguracyjnej sterownika (bez internetu).
 #pragma once
 
@@ -41,10 +41,21 @@ button:disabled{opacity:.5;cursor:default}
 #msg{font-size:14px}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14px}
 .kv div:nth-child(odd){color:var(--mut)}
+#settings fieldset{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 12px;min-width:0}
+#settings legend{font-weight:600;padding:0 6px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:5px 0}
+.srow input[type=number]{width:96px;padding:5px 8px;border-radius:6px;text-align:right}
+.srow input[type=checkbox]{width:20px;height:20px;flex:none}
+.formgrid{display:grid;gap:0 16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 </style></head><body>
 <header><h1>Konfiguracja sterownika</h1><a href="/panel">Panel ›</a></header>
 <main>
 <section class="card"><h2>Stan</h2><div class="kv" id="state"></div></section>
+
+<section class="card"><h2>Ustawienia</h2>
+<p class="hint">Alarmy, pompy, wyświetlacz i dane. Działają od razu, bez ponownego uruchomienia.</p>
+<form id="settings"><div class="formgrid" id="fields"></div>
+<div class="row"><button type="submit">Zapisz ustawienia</button><span id="smsg" class="status"></span></div></form></section>
 
 <form id="cfg" autocomplete="off">
 <section class="card"><h2>Wi-Fi</h2>
@@ -109,6 +120,24 @@ async function load(){
     'Firebase':okOr(C.firebase.status)+(C.firebase.error?` – ${C.firebase.error}`:'')};
   $('#state').innerHTML=Object.entries(kv).map(([k,v])=>`<div>${k}</div><div>${v}</div>`).join('');
 }
+// User settings (/api/settings): saved right away, no restart. Pump groups hidden while the pump section is off.
+let S=null;
+async function loadSettings(){
+  S=await j('/api/settings');const groups={};
+  for(const f of S.fields)(groups[f.group]=groups[f.group]||[]).push(f);
+  $('#fields').innerHTML=Object.entries(groups).filter(([gname])=>S.values.pumps||!/^Pompa /.test(gname)).map(([gname,fs])=>{
+    const note=(gname==='Pompa CO'&&!S.pumpOutputs.co)||(gname==='Pompa CWU'&&!S.pumpOutputs.cwu)?
+      '<div class="hint">Brak skonfigurowanego wyjścia – logika działa tylko jako podgląd.</div>':'';
+    return `<fieldset><legend>${gname}</legend>${note}`+fs.map(f=>{const v=S.values[f.key];
+      const inp=f.type==='bool'?`<input type="checkbox" name="${f.key}" ${v?'checked':''}>`:
+        `<span><input type="number" name="${f.key}" value="${v}" min="${f.min}" max="${f.max}" step="${f.step}"> ${f.unit}</span>`;
+      return `<label class="srow"><span>${f.label}</span>${inp}</label>`}).join('')+'</fieldset>'}).join('');
+}
+$('#settings').onsubmit=async e=>{e.preventDefault();const body=new URLSearchParams(),m=$('#smsg');
+  for(const f of S.fields){const el=e.target.elements[f.key];if(!el)continue;body.append(f.key,f.type==='bool'?(el.checked?'1':'0'):el.value)}
+  try{await j('/api/settings',{method:'POST',body});await loadSettings();m.className='status';m.innerHTML='Zapisano '+CHECK}
+  catch(err){m.className='bad';m.textContent='Błąd zapisu: '+err.message}
+  setTimeout(()=>m.textContent='',4000)};
 async function waitBack(msgEl,text){msgEl.textContent=text;const t0=Date.now();
   await new Promise(r=>setTimeout(r,4000));
   for(;;){try{await j('/api/config');location.reload();return}catch(e){}
@@ -139,4 +168,5 @@ $('#upload').onclick=()=>{const file=$('#fw').files[0];if(!file)return;
   x.onerror=()=>{m.className='bad';m.textContent='Przerwane połączenie';$('#upload').disabled=false};
   x.open('POST','/update');x.send(fd)};
 load().catch(e=>{$('#state').textContent='Błąd: '+e.message});
+loadSettings().catch(e=>{$('#fields').textContent='Błąd: '+e.message});
 </script></body></html>)HTML";
