@@ -58,6 +58,7 @@ static void setFbError(const char *msg) {
 // Bledne dane logowania (zly e-mail, haslo, klucz API) nie naprawia sie same - biblioteka
 // ponawialaby je kilka razy na sekunde. Takie bledy wstrzymuja Firebase na FB_AUTH_PAUSE_MS.
 const uint32_t FB_AUTH_PAUSE_MS = 600000;
+const uint8_t FB_SENSOR_FAULT_READS = 3;   // failed reads in a row before -127 is sent
 static volatile bool fbAuthFailed = false;
 
 static bool permanentAuthError(const String &msg) {
@@ -188,8 +189,15 @@ static void sendDataToFirebase() {
   if (!ready || !timeValid()) return;   // bez czasu klucz /readings/<epoch> bylby bledny
   if (lastSendedDataMiliseconds != 0 && millis() - lastSendedDataMiliseconds <= interval) return;
 
-  lastSendedDataMiliseconds = millis();
+  // Wait for real readings: before the first measurement raw is the -127 placeholder, and a
+  // single failed read is retried by the controller. -127 is sent only for a lasting fault
+  // (FB_SENSOR_FAULT_READS failed reads in a row), as in the old controller.
   CtrlState st = controllerSnapshot();
+  if (st.readings == 0) return;
+  for (const SensorState &s : st.s)
+    if (!s.ok && s.errors < FB_SENSOR_FAULT_READS) return;
+
+  lastSendedDataMiliseconds = millis();
   int timeStamp = (int)time(nullptr);
   Serial.print("time: ");
   Serial.println(timeStamp);
